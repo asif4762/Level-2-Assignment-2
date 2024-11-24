@@ -17,24 +17,24 @@ export const calculateRevenue = async () => {
       const revenueAggregation = await orderModel.aggregate([
         {
           $lookup: {
-            from: 'stationeries', // Collection name for products
-            localField: 'product', // Field in the orders collection
-            foreignField: '_id', // Field in the stationeries collection
-            as: 'productDetails', // Alias for joined data
+            from: 'stationeries', 
+            localField: 'product', 
+            foreignField: '_id', 
+            as: 'productDetails', 
           },
         },
         {
-          $unwind: '$productDetails', // Flatten the productDetails array
+          $unwind: '$productDetails', 
         },
         {
           $addFields: {
-            totalPrice: { $multiply: ['$productDetails.price', '$quantity'] }, // Compute total price
+            totalPrice: { $multiply: ['$productDetails.price', '$quantity'] }, 
           },
         },
         {
           $group: {
-            _id: null, // Group all orders
-            totalRevenue: { $sum: '$totalPrice' }, // Sum all total prices
+            _id: null, 
+            totalRevenue: { $sum: '$totalPrice' }, 
           },
         },
         {
